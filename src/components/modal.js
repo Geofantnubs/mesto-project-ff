@@ -1,3 +1,4 @@
+import { statickProfil } from "./form";
 const popup = document.querySelectorAll(".popup");
 const popupEdit = document.querySelector(".popup_type_edit");
 const popupNewCard = document.querySelector(".popup_type_new-card");
@@ -18,6 +19,7 @@ popupArray.map(function (evt) {
 function popupAdd(evt) {
   if (evt.target === profilOpen) {
     popupEdit.classList.add(open);
+    statickProfil();
   }
   if (evt.target === createCardOpen) {
     popupNewCard.classList.add(open);

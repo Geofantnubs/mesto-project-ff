@@ -42,7 +42,9 @@ closePopup.forEach(function (btn) {
 });
 
 document.addEventListener("keydown", popupEcs);
+
 document.addEventListener("click", popupOverClose);
 
+// Отправка формы кнопкой сохранить
 formElementProfil.addEventListener("submit", handleFormSubmit);
 formElementCard.addEventListener("submit", newCardAdd);
