@@ -3,26 +3,30 @@ import {
   formElementProfil,
   formElementCard,
   handleFormSubmit,
-  newCardAdd,
+  addNewCard,
   placesList,
+  addFromProfil,
 } from "./components/form.js";
 import {
   initialCards,
   createCard,
   deleteCard,
   likeCard,
-  zoomImg,
-} from "./components/cards.js";
+} from "./components/card.js";
 import {
-  popupAdd,
-  popupEcs,
-  removePopup,
-  createCardOpen,
-  profilOpen,
+  openPopup,
   closePopup,
-  popupOverClose,
-  popup,
+  closeOverlayPopup,
+  popupNewCard,
+  popupProfil,
+  popupImage,
+  popupImg,
+  popupCaption,
 } from "./components/modal.js";
+
+const openCreateCard = document.querySelector(".profile__add-button");
+const openProfil = document.querySelector(".profile__edit-button");
+const closePopupButton = document.querySelectorAll(".popup__close");
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (el) {
@@ -32,19 +36,30 @@ initialCards.forEach(function (el) {
 });
 
 // Открытие попап
-createCardOpen.addEventListener("click", popupAdd);
-
-profilOpen.addEventListener("click", popupAdd);
-
-// Закрытие попап
-closePopup.forEach(function (btn) {
-  btn.addEventListener("click", removePopup);
+openCreateCard.addEventListener("click", function () {
+  openPopup(popupNewCard);
 });
 
-document.addEventListener("keydown", popupEcs);
+openProfil.addEventListener("click", function () {
+  openPopup(popupProfil);
+  addFromProfil();
+});
 
-document.addEventListener("click", popupOverClose);
+// функция увеличения карточки
+export function zoomImg(link, name) {
+  popupImg.src = link;
+  popupImg.alt = name;
+  popupCaption.textContent = name;
+  openPopup(popupImage);
+}
+
+// Закрытие попап
+closePopupButton.forEach(function (btn) {
+  btn.addEventListener("click", closePopup);
+});
+
+document.addEventListener("click", closeOverlayPopup);
 
 // Отправка формы кнопкой сохранить
 formElementProfil.addEventListener("submit", handleFormSubmit);
-formElementCard.addEventListener("submit", newCardAdd);
+formElementCard.addEventListener("submit", addNewCard);

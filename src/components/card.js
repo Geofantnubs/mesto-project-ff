@@ -1,8 +1,5 @@
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
-const openImg = document.querySelector(".popup_type_image");
-const popupImg = document.querySelector(".popup__image");
-const popupCaption = document.querySelector(".popup__caption");
 
 const initialCards = [
   {
@@ -44,19 +41,11 @@ function createCard(link, name, delCard, like, zoomCard) {
   cardTitle.textContent = name;
   deleteButton.addEventListener("click", delCard);
   likeButton.addEventListener("click", like);
-  cardImage.addEventListener("click", zoomCard);
+  cardImage.addEventListener("click", function () {
+    zoomCard(link, name);
+  });
 
   return cardElement;
-}
-
-// функция увеличения карточки
-function zoomImg(evt) {
-  popupImg.src = evt.target.src;
-  popupCaption.textContent = evt.target.alt;
-
-  if (evt.target) {
-    openImg.classList.add("popup_is-opened");
-  }
 }
 
 // Функция лайка карточки
@@ -69,4 +58,4 @@ function deleteCard(evt) {
   return evt.target.closest(".card").remove();
 }
 
-export { initialCards, createCard, deleteCard, likeCard, zoomImg };
+export { initialCards, createCard, deleteCard, likeCard };

@@ -1,5 +1,6 @@
-import { createCard, deleteCard, likeCard, zoomImg } from "./cards";
-import { removePopup } from "./modal";
+import { createCard, deleteCard, likeCard } from "./card";
+import { closePopup } from "./modal";
+import { zoomImg } from "..";
 
 const formElementProfil = document.forms.editProfile;
 const nameInput = editProfile.elements.name;
@@ -9,7 +10,6 @@ const cardNameInput = newPlace.elements.placeName;
 const cardLinkInput = newPlace.elements.link;
 const profilName = document.querySelector(".profile__title");
 const profilDesc = document.querySelector(".profile__description");
-
 const placesList = document.querySelector(".places__list");
 
 // функция редактирования профиля
@@ -19,17 +19,17 @@ function handleFormSubmit(evt) {
   profilName.textContent = nameInput.value;
   profilDesc.textContent = jobInput.value;
 
-  removePopup();
+  closePopup();
 }
 
 //Функция которая показывает имя и работу пользователя при первом открытии
-function statickProfil() {
+function addFromProfil() {
   nameInput.value = profilName.textContent;
   jobInput.value = profilDesc.textContent;
 }
 
 // Функция добавления карточки из формы
-function newCardAdd(evt) {
+function addNewCard(evt) {
   evt.preventDefault();
   const name = cardNameInput.value;
   const link = cardLinkInput.value;
@@ -38,14 +38,14 @@ function newCardAdd(evt) {
 
   formElementCard.reset();
 
-  removePopup();
+  closePopup();
 }
 
 export {
   formElementProfil,
   formElementCard,
   handleFormSubmit,
-  newCardAdd,
+  addNewCard,
+  addFromProfil,
   placesList,
-  statickProfil,
 };

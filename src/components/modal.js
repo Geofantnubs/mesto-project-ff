@@ -1,61 +1,62 @@
-import { statickProfil } from "./form";
 const popup = document.querySelectorAll(".popup");
-const popupEdit = document.querySelector(".popup_type_edit");
-const popupNewCard = document.querySelector(".popup_type_new-card");
-const createCardOpen = document.querySelector(".profile__add-button");
-const profilOpen = document.querySelector(".profile__edit-button");
-const closePopup = document.querySelectorAll(".popup__close");
 
+const addOpen = "popup_is-opened";
+const addAnimation = "popup_is-animated";
 const popupArray = Array.from(popup);
-const open = "popup_is-opened";
-const anima = "popup_is-animated";
+const popupProfil = seachElArray(".popup_type_edit");
+const popupNewCard = seachElArray(".popup_type_new-card");
+const popupImage = seachElArray(".popup_type_image");
+const popupImg = document.querySelector(".popup__image");
+const popupCaption = document.querySelector(".popup__caption");
+
+function seachElArray(name) {
+  let result = document.querySelector(name);
+  popupArray.find(function (el) {
+    el === result;
+  });
+  return result;
+}
 
 // Добавление плавности попап
 popupArray.map(function (evt) {
-  evt.classList.add(anima);
+  evt.classList.add(addAnimation);
 });
 
 // Функция открытия попап
-function popupAdd(evt) {
-  if (evt.target === profilOpen) {
-    popupEdit.classList.add(open);
-    statickProfil();
-  }
-  if (evt.target === createCardOpen) {
-    popupNewCard.classList.add(open);
-  }
+function openPopup(name) {
+  name.classList.add(addOpen);
+  addEventListener("keydown", closeEscPopup);
 }
 
 // Функция удаления попап
-function removePopup() {
-  popupArray.map(function (evt) {
-    evt.classList.remove(open);
-  });
+function closePopup(evt) {
+  evt = seachElArray(".popup_is-opened");
+  evt.classList.remove(addOpen);
+  removeEventListener("keydown", closeEscPopup);
+  removeEventListener("click", closeOverlayPopup);
 }
 
 // Функция удаления попап по кнопке Esc
-function popupEcs(evt) {
+function closeEscPopup(evt) {
   if (evt.key === "Escape") {
-    removePopup();
+    closePopup();
   }
 }
 
 // Функция удаления попап по оверлею
-function popupOverClose(evt) {
-  popupArray.map(function (el) {
-    if (evt.target === el) {
-      removePopup();
-    }
-  });
+function closeOverlayPopup(evt) {
+  if (evt.target === seachElArray(".popup_is-opened")) {
+    closePopup();
+  }
 }
 
 export {
-  popupAdd,
-  removePopup,
-  popupEcs,
-  createCardOpen,
-  profilOpen,
+  openPopup,
   closePopup,
-  popupOverClose,
-  popup,
+  closeOverlayPopup,
+  popupProfil,
+  popupNewCard,
+  popupImage,
+  popupImg,
+  popupCaption,
 };
