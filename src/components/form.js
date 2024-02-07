@@ -1,36 +1,37 @@
 import { createCard, deleteCard, likeCard } from "./card";
 import { closePopup } from "./modal";
-import { zoomImg } from "..";
-
-const formElementProfil = document.forms.editProfile;
-const nameInput = editProfile.elements.name;
-const jobInput = editProfile.elements.description;
-const formElementCard = document.forms.newPlace;
-const cardNameInput = newPlace.elements.placeName;
-const cardLinkInput = newPlace.elements.link;
-const profilName = document.querySelector(".profile__title");
-const profilDesc = document.querySelector(".profile__description");
-const placesList = document.querySelector(".places__list");
+import {
+  zoomImg,
+  formElementCard,
+  placesList,
+  profilName,
+  profilDesc,
+  nameInputProfil,
+  jobInputProfil,
+  cardLinkInput,
+  cardNameInput,
+} from "../index.js";
 
 // функция редактирования профиля
-function handleFormSubmit(evt) {
+function handleFormSubmitProfil(evt) {
   evt.preventDefault();
 
-  profilName.textContent = nameInput.value;
-  profilDesc.textContent = jobInput.value;
+  profilName.textContent = nameInputProfil.value;
+  profilDesc.textContent = jobInputProfil.value;
 
   closePopup();
 }
 
 //Функция которая показывает имя и работу пользователя при первом открытии
-function addFromProfil() {
-  nameInput.value = profilName.textContent;
-  jobInput.value = profilDesc.textContent;
+function addInfoFromProfil() {
+  nameInputProfil.value = profilName.textContent;
+  jobInputProfil.value = profilDesc.textContent;
 }
 
 // Функция добавления карточки из формы
-function addNewCard(evt) {
+function handleFormSubmitCard(evt) {
   evt.preventDefault();
+
   const name = cardNameInput.value;
   const link = cardLinkInput.value;
 
@@ -41,11 +42,4 @@ function addNewCard(evt) {
   closePopup();
 }
 
-export {
-  formElementProfil,
-  formElementCard,
-  handleFormSubmit,
-  addNewCard,
-  addFromProfil,
-  placesList,
-};
+export { handleFormSubmitProfil, handleFormSubmitCard, addInfoFromProfil };

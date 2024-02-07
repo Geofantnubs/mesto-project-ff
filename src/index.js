@@ -1,32 +1,40 @@
 import "./pages/index.css";
+import { initialCards } from "./components/cards.js";
+import { createCard, deleteCard, likeCard } from "./components/card.js";
 import {
-  formElementProfil,
-  formElementCard,
-  handleFormSubmit,
-  addNewCard,
-  placesList,
-  addFromProfil,
-} from "./components/form.js";
-import {
-  initialCards,
-  createCard,
-  deleteCard,
-  likeCard,
-} from "./components/card.js";
-import {
-  openPopup,
   closePopup,
+  openPopup,
   closeOverlayPopup,
-  popupNewCard,
-  popupProfil,
-  popupImage,
-  popupImg,
-  popupCaption,
 } from "./components/modal.js";
 
-const openCreateCard = document.querySelector(".profile__add-button");
-const openProfil = document.querySelector(".profile__edit-button");
-const closePopupButton = document.querySelectorAll(".popup__close");
+import {
+  handleFormSubmitCard,
+  handleFormSubmitProfil,
+  addInfoFromProfil,
+} from "./components/form.js";
+
+// Переменные главного файла
+const buttonOpenPopupCard = document.querySelector(".profile__add-button");
+const buttonOpenPopupProfil = document.querySelector(".profile__edit-button");
+const popupCloseButtons = document.querySelectorAll(".popup__close");
+const popupProfil = document.querySelector(".popup_type_edit");
+const popupNewCard = document.querySelector(".popup_type_new-card");
+const popupImage = document.querySelector(".popup_type_image");
+
+// Переменные модальных окон
+const popupImg = document.querySelector(".popup__image");
+const popupCaption = document.querySelector(".popup__caption");
+
+// Переменные формы
+const formElementProfil = document.forms.editProfile;
+const nameInputProfil = editProfile.elements.name;
+const jobInputProfil = editProfile.elements.description;
+const formElementCard = document.forms.newPlace;
+const cardNameInput = newPlace.elements.placeName;
+const cardLinkInput = newPlace.elements.link;
+const profilName = document.querySelector(".profile__title");
+const profilDesc = document.querySelector(".profile__description");
+const placesList = document.querySelector(".places__list");
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(function (el) {
@@ -36,17 +44,17 @@ initialCards.forEach(function (el) {
 });
 
 // Открытие попап
-openCreateCard.addEventListener("click", function () {
+buttonOpenPopupCard.addEventListener("click", function () {
   openPopup(popupNewCard);
 });
 
-openProfil.addEventListener("click", function () {
+buttonOpenPopupProfil.addEventListener("click", function () {
   openPopup(popupProfil);
-  addFromProfil();
+  addInfoFromProfil();
 });
 
 // функция увеличения карточки
-export function zoomImg(link, name) {
+function zoomImg(link, name) {
   popupImg.src = link;
   popupImg.alt = name;
   popupCaption.textContent = name;
@@ -54,12 +62,26 @@ export function zoomImg(link, name) {
 }
 
 // Закрытие попап
-closePopupButton.forEach(function (btn) {
+popupCloseButtons.forEach(function (btn) {
   btn.addEventListener("click", closePopup);
 });
 
 document.addEventListener("click", closeOverlayPopup);
 
 // Отправка формы кнопкой сохранить
-formElementProfil.addEventListener("submit", handleFormSubmit);
-formElementCard.addEventListener("submit", addNewCard);
+formElementProfil.addEventListener("submit", handleFormSubmitProfil);
+formElementCard.addEventListener("submit", handleFormSubmitCard);
+
+export {
+  nameInputProfil,
+  jobInputProfil,
+  cardNameInput,
+  cardLinkInput,
+  profilName,
+  profilDesc,
+  zoomImg,
+  placesList,
+  formElementCard,
+  popupImg,
+  popupCaption,
+};

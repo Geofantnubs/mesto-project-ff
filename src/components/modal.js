@@ -1,39 +1,24 @@
-const popup = document.querySelectorAll(".popup");
+const popups = document.querySelectorAll(".popup");
 
-const addOpen = "popup_is-opened";
-const addAnimation = "popup_is-animated";
-const popupArray = Array.from(popup);
-const popupProfil = seachElArray(".popup_type_edit");
-const popupNewCard = seachElArray(".popup_type_new-card");
-const popupImage = seachElArray(".popup_type_image");
-const popupImg = document.querySelector(".popup__image");
-const popupCaption = document.querySelector(".popup__caption");
-
-function seachElArray(name) {
-  let result = document.querySelector(name);
-  popupArray.find(function (el) {
-    el === result;
-  });
-  return result;
-}
+const popupArray = Array.from(popups);
 
 // Добавление плавности попап
 popupArray.map(function (evt) {
-  evt.classList.add(addAnimation);
+  evt.classList.add("popup_is-animated");
 });
 
 // Функция открытия попап
-function openPopup(name) {
-  name.classList.add(addOpen);
-  addEventListener("keydown", closeEscPopup);
+function openPopup(element) {
+  element.classList.add("popup_is-opened");
+  document.addEventListener("keydown", closeEscPopup);
 }
 
 // Функция удаления попап
-function closePopup(evt) {
-  evt = seachElArray(".popup_is-opened");
-  evt.classList.remove(addOpen);
-  removeEventListener("keydown", closeEscPopup);
-  removeEventListener("click", closeOverlayPopup);
+function closePopup(element) {
+  element = document.querySelector(".popup_is-opened");
+
+  element.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", closeEscPopup);
 }
 
 // Функция удаления попап по кнопке Esc
@@ -45,18 +30,9 @@ function closeEscPopup(evt) {
 
 // Функция удаления попап по оверлею
 function closeOverlayPopup(evt) {
-  if (evt.target === seachElArray(".popup_is-opened")) {
+  if (evt.target.classList.contains("popup_is-opened")) {
     closePopup();
   }
 }
 
-export {
-  openPopup,
-  closePopup,
-  closeOverlayPopup,
-  popupProfil,
-  popupNewCard,
-  popupImage,
-  popupImg,
-  popupCaption,
-};
+export { openPopup, closePopup, closeOverlayPopup };
