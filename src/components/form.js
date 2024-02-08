@@ -1,5 +1,5 @@
 import { createCard, deleteCard, likeCard } from "./card";
-import { closePopup } from "./modal";
+import { closePopup, seachPopupIsOpen } from "./modal";
 import {
   zoomImg,
   formElementCard,
@@ -19,7 +19,7 @@ function handleFormSubmitProfil(evt) {
   profilName.textContent = nameInputProfil.value;
   profilDesc.textContent = jobInputProfil.value;
 
-  closePopup();
+  closePopup(seachPopupIsOpen());
 }
 
 //Функция которая показывает имя и работу пользователя при первом открытии
@@ -39,7 +39,7 @@ function handleFormSubmitCard(evt) {
 
   formElementCard.reset();
 
-  closePopup();
+  closePopup(seachPopupIsOpen());
 }
 
 export { handleFormSubmitProfil, handleFormSubmitCard, addInfoFromProfil };

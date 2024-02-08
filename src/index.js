@@ -5,6 +5,7 @@ import {
   closePopup,
   openPopup,
   closeOverlayPopup,
+  seachPopupIsOpen,
 } from "./components/modal.js";
 
 import {
@@ -63,7 +64,9 @@ function zoomImg(link, name) {
 
 // Закрытие попап
 popupCloseButtons.forEach(function (btn) {
-  btn.addEventListener("click", closePopup);
+  btn.addEventListener("click", function () {
+    closePopup(seachPopupIsOpen());
+  });
 });
 
 document.addEventListener("click", closeOverlayPopup);
