@@ -8,11 +8,51 @@
   box-sizing: border-box;
   padding: 10px 0 0;
   margin-bottom: 10px;
+  position: relative;
+
 }
+
+.form__field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 35px;
+}
+
+.form__field:last-of-type {
+  padding-bottom: 0;
+}
+
 
 .popup__input:last-of-type {
   margin-bottom: 0;
+
 }
+
+.popup__input_type_error {
+  border-bottom-color: #ff0000 ;
+}
+
+.popup__error {
+  font-size: 12px;
+  line-height: 15px;
+  font-size: 12px;
+  line-height: 15px;
+  color: red;
+  opacity: 0;
+  top: calc(100% + 6px);
+  left: 0;
+  position: absolute;
+  transition: 0.3s;
+}
+
+
+
+
+.popup__error_active {
+  opacity: 1;
+}
+
 
 @media screen and (max-width: 568px) {
   .popup__title {

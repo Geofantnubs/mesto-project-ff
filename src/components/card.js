@@ -1,5 +1,9 @@
+
+import { zoomImg } from "../index.js";
+import { initialCards } from '../components/cards.js'
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
+const placesList = document.querySelector(".places__list");
 
 // @todo: Функция создания карточки
 function createCard(link, name, delCard, like, zoomCard) {
@@ -14,7 +18,7 @@ function createCard(link, name, delCard, like, zoomCard) {
   cardTitle.textContent = name;
   deleteButton.addEventListener("click", delCard);
   likeButton.addEventListener("click", like);
-  cardImage.addEventListener("click", function () {
+  cardImage.addEventListener("click", () => {
     zoomCard(link, name);
   });
 
@@ -30,5 +34,13 @@ function likeCard(evt) {
 function deleteCard(evt) {
   return evt.target.closest(".card").remove();
 }
+// Вывести карточки на страницу
+function addCardsToPage () {
+  initialCards.forEach(function (el) {
+    placesList.append(
+      createCard(el.link, el.name, deleteCard, likeCard, zoomImg)
+    );
+  });
+}
 
-export { createCard, deleteCard, likeCard };
+export { createCard, deleteCard, likeCard, addCardsToPage, placesList };
