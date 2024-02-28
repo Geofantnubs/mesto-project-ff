@@ -4,10 +4,57 @@
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
+  border-color: transparent;
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
+  position: relative;
+  transition: all 0.6s ease;
 }
+.profile__image:hover {
+cursor: pointer;
+}
+
+
+.profile__image::before {
+  content: '';
+  position: absolute;
+  background-color: black;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 50%;
+width: 120px;
+height: 120px;
+opacity: 0;
+transition: 0.3s;
+
+}
+
+ .profile__image::after{
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  top: 38%;
+  left: 40%;
+  background-size: cover;
+  background-position: center;
+  background-image: url(../../../images/Vector.svg);
+  opacity: 0;
+  transition: 0.3s;
+}
+
+
+.profile__image:hover::after {
+opacity: 1;
+}
+
+.profile__image:hover::before {
+  opacity: 0.8;
+}
+
+
 
 @media screen and (max-width: 740px) {
   .profile__image {

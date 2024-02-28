@@ -85,4 +85,4 @@ function disabledButton(formElement) {
   buttonElement.removeAttribute("disabled");
 }
 
-export {disabledButton, hideInputPopupError, enableValidation}
+export {disabledButton, hideInputPopupError, enableValidation, toggleButtonState}
