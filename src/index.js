@@ -1,5 +1,4 @@
 import "./pages/index.css";
-// import { showCardsPage } from "./components/card.js";
 import { openPopup, closePopupClick } from "./components/modal.js";
 
 import {
@@ -7,7 +6,7 @@ import {
   handleFormSubmitProfil,
   addInfoFromProfil,
   submitForm,
-  handleFormSubmitDelete,
+  handleFormSubmitAvatar,
 } from "./components/form.js";
 
 import {
@@ -20,12 +19,10 @@ import {
 import { getUser } from "./components/api.js";
 import { showCardsPage } from "./components/card.js";
 
-
-showCardsPage()
+showCardsPage();
 // Переменные главного файла
 const popupImage = document.querySelector(".popup_type_image");
-const cardDelete = {}
-
+const cardDelete = {};
 
 // Переменные модальных окон
 const popupImg = document.querySelector(".popup__image");
@@ -34,54 +31,49 @@ const popupCaption = document.querySelector(".popup__caption");
 // Переменные формы
 const profilName = document.querySelector(".profile__title");
 const profilDesc = document.querySelector(".profile__description");
+const profilAvatar = document.querySelector(".profile__image");
 
-
-// Клик по аватару
-function editAvatar() {
-
-}
-
-// editAvatar()
-
-
-function pushProfilInfo (name, about) {
+// Функция показа информации о пользователе с сервера
+function showProfilInfo() {
   getUser()
   .then((dataUser) => {
-    name = dataUser.name
-    about = dataUser.about
-    profilName.textContent = dataUser.name
-    profilDesc.textContent = dataUser.about
-  const profilAvatar = dataUser.avatar
-  const profilId = dataUser._id
+    profilName.textContent = dataUser.name;
+    profilDesc.textContent = dataUser.about;
   })
-
+  .catch((err) => {
+    console.error(`Ошибка: ${err}`);
+  });
+}
+// Функция показа аватара с сервера
+function showAvatar() {
+  getUser()
+  .then((dataUser) => {
+    profilAvatar.style.backgroundImage = `url(${dataUser.avatar})`;
+  })
+  .catch((err) => {
+    console.error(`Ошибка: ${err}`);
+  });
 }
 
 
-pushProfilInfo()
+// Функция открытия попап аватара
+function openPopupAvatar() {
+  const popupEditAvatar = document.querySelector(".popup_type_edit-avatar");
+  const buttonOpenPopupAvatar = document.querySelector(".profile__image");
+  const avatarForm = popupEditAvatar.querySelector(".edit-avatar");
 
-function pushProfilInfoError (err) {
-  profilName.textContent = err
-  profilDesc.textContent = err
-}
-
-// Открытие попапа форм, обнуление ошибок и активация кнопки
-function openPopupClick() {
-  const buttonOpenPopupCard = document.querySelector(".profile__add-button");
-  const buttonOpenPopupProfil = document.querySelector(".profile__edit-button");
-  const popupProfil = document.querySelector(".popup_type_edit");
-  const popupNewCard = document.querySelector(".popup_type_new-card");
-  const profilForm = popupProfil.querySelector(".edit-profil");
-  const cardForm = popupNewCard.querySelector(".new-place");
-  const avatar = document.querySelector('.profile__image')
-  const popupEditAvatar = document.querySelector('.popup_type_edit-avatar')
-  const avatarForm = popupEditAvatar.querySelector('.edit-avatar')
-
-  avatar.addEventListener('click', () => {
-    openPopup(popupEditAvatar)
+  buttonOpenPopupAvatar.addEventListener("click", () => {
     hideInputPopupError(avatarForm);
+    toggleButtonState(avatarForm);
+    openPopup(popupEditAvatar);
+  });
+}
 
-  })
+// Функция открытия попап профиля
+function openPopupProfil() {
+  const popupProfil = document.querySelector(".popup_type_edit");
+  const buttonOpenPopupProfil = document.querySelector(".profile__edit-button");
+  const profilForm = popupProfil.querySelector(".edit-profil");
 
   buttonOpenPopupProfil.addEventListener("click", () => {
     addInfoFromProfil();
@@ -89,11 +81,17 @@ function openPopupClick() {
     hideInputPopupError(profilForm);
     openPopup(popupProfil);
   });
+}
+
+// Функция открытия попап добавления карточки
+function openPopupCard() {
+  const buttonOpenPopupCard = document.querySelector(".profile__add-button");
+  const popupNewCard = document.querySelector(".popup_type_new-card");
+  const cardForm = popupNewCard.querySelector(".new-place");
 
   buttonOpenPopupCard.addEventListener("click", () => {
-    const inputLists = Array.from(cardForm.querySelectorAll(".popup__input"));
     hideInputPopupError(cardForm);
-    toggleButtonState(cardForm, inputLists);
+    toggleButtonState(cardForm);
     openPopup(popupNewCard);
   });
 }
@@ -106,12 +104,24 @@ function zoomImg(link, name) {
   openPopup(popupImage);
 }
 
-submitForm("editProfile", () => {handleFormSubmitProfil()});
-submitForm("newPlace", () => {handleFormSubmitCard()});
+showProfilInfo();
+showAvatar();
+submitForm("editAvatar", handleFormSubmitAvatar);
+submitForm("editProfile", handleFormSubmitProfil);
+submitForm("newPlace", handleFormSubmitCard);
 closePopupClick();
 enableValidation();
-openPopupClick();
+openPopupAvatar();
+openPopupProfil();
+openPopupCard();
 
-
-
-export { profilName, profilDesc, zoomImg, popupImg, popupCaption, pushProfilInfo, pushProfilInfoError, cardDelete };
+export {
+  profilName,
+  profilDesc,
+  zoomImg,
+  popupImg,
+  popupCaption,
+  showProfilInfo,
+  cardDelete,
+  showAvatar,
+};

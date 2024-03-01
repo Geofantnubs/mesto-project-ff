@@ -47,7 +47,7 @@ function setEventListeners(formElement) {
   inputLists.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
       checkInputValidity(formElement, inputElement);
-      toggleButtonState(formElement, inputLists);
+      toggleButtonState(formElement);
     });
   });
 }
@@ -62,27 +62,35 @@ function enableValidation() {
     setEventListeners(formElement);
   });
 }
+
 // Валидация полей
 function hasInvalidInput(inputList) {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   });
 }
-// Добавление блокировки для кнопки
-function toggleButtonState(formElement, inputList) {
-  const buttonElement = formElement.querySelector(".popup__button");
 
-  if (hasInvalidInput(inputList)) {
+// Добавление блокировки для кнопки
+function toggleButtonState(formElement) {
+  const buttonElement = formElement.querySelector(".popup__button");
+  const inputLists = Array.from(formElement.querySelectorAll(".popup__input"));
+
+  if (hasInvalidInput(inputLists)) {
     buttonElement.setAttribute("disabled", true);
   } else {
     buttonElement.removeAttribute("disabled");
   }
 }
 
-// Сброс блокировки для кнопки
+// Сброс блокировки для кнопки "Сохранить" в профиле
 function disabledButton(formElement) {
   const buttonElement = formElement.querySelector(".popup__button");
   buttonElement.removeAttribute("disabled");
 }
 
-export {disabledButton, hideInputPopupError, enableValidation, toggleButtonState}
+export {
+  disabledButton,
+  hideInputPopupError,
+  enableValidation,
+  toggleButtonState,
+};

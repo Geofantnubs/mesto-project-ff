@@ -20,10 +20,7 @@
       </header>
       <main class="content">
         <section class="profile page__section">
-          <div
-            class="profile__image"
-            style="background-image: url(<%=require('./images/avatar.jpg')%>)"
-          ></div>
+          <div class="profile__image"></div>
           <div class="profile__info">
             <h1 class="profile__title"></h1>
             <button class="profile__edit-button" type="button"></button>
@@ -83,22 +80,19 @@
         <div class="popup__content popup__content-avatar">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Обновить аватар</h3>
-          <form class="popup__form edit-avatar" name="edit-avatar">
-            <label class="form__field" for="link">
+          <form class="popup__form edit-avatar" name="editAvatar" novalidate>
+            <label class="form__field" for="avatar">
               <input
                 type="url"
-                name="link"
-                id="link"
-                class="popup__input popup__input_type_url"
+                name="avatar"
+                id="avatar"
+                class="popup__input popup__input_type_avatar_url"
                 placeholder="Ссылка на картинку"
                 required
               />
-              <span class="popup__error link-error"></span>
+              <span class="popup__error avatar-error"></span>
             </label>
-            <button
-              type="submit"
-              class="button popup__button popup__button-delete"
-            >
+            <button type="submit" class="button popup__button">
               Сохранить
             </button>
           </form>
@@ -164,7 +158,7 @@
       </div>
     </div>
     <template id="card-template">
-      <li class="places__item card" data-name="card">
+      <li class="places__item card">
         <img class="card__image" src="" alt="" />
         <button type="button" class="card__delete-button"></button>
         <div class="card__description">

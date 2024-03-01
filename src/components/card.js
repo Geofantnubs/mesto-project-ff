@@ -1,5 +1,5 @@
 import { zoomImg, cardDelete } from "../index.js";
-import { closePopup, openPopup, seachPopupIsOpen } from "./modal.js";
+import { openPopup } from "./modal.js";
 import { submitForm, handleFormSubmitDelete } from "./form.js";
 import { addDataLike, getCard, getUser, removeDataLike } from "./api.js";
 
@@ -21,11 +21,10 @@ function createCard(
   cardId,
   like,
   zoomCard,
+  likes,
   count,
   cardOwnerId,
-  userId,
-  likes
-
+  userId
 ) {
   const popupDelete = document.querySelector(".popup_type_delete-card");
   const cardElement = cardTemplate.cloneNode(true);
@@ -41,23 +40,22 @@ function createCard(
   cardImage.alt = name;
   cardTitle.textContent = name;
   deleteButtonRemove(cardOwnerId, userId, deleteButton);
+  likeCardDefailt(likeButton, likes, userId);
 
   deleteButton.addEventListener("click", () => {
     cardDelete.cardId = cardId;
     cardDelete.card = card;
     openPopup(popupDelete);
   });
-  likeCardDefailt(likeButton, likes, userId)
 
   likeButton.addEventListener("click", (evt) => {
-    like(evt)
-    toggleDataCard(evt, cardId, likeCount)
+    like(evt);
+    toggleDataCard(evt, cardId, likeCount);
   });
 
   cardImage.addEventListener("click", () => {
     zoomCard(link, name);
   });
-
   return cardElement;
 }
 submitForm("delete-card", () => {
@@ -65,47 +63,35 @@ submitForm("delete-card", () => {
 });
 
 // Вывод лайкнутой карточки
-function likeCardDefailt (likeButton ,likes, userId) {
+function likeCardDefailt(likeButton, likes, userId) {
   likes.find((el) => {
-    if(el._id === userId) {
-      likeButton.classList.add('card__like-button_is-active')
+    if (el._id === userId) {
+      likeButton.classList.toggle("card__like-button_is-active");
     }
-  })
+  });
 }
 
 // Функция лайка карточки
 function likeCard(evt) {
-evt.target.classList.toggle('card__like-button_is-active')
-
-
+  evt.target.classList.toggle("card__like-button_is-active");
 }
 
+// Функция добавдения счётчика карточки
 function toggleDataCard(evt, cardId, likeCount) {
-  if(evt.target.classList.contains('card__like-button_is-active')) {
-    addDataLike(cardId)
-    .then(data => {
-      likeCount.textContent = data.likes.length
-    })
-  } else if (!evt.target.classList.contains('card__like-button_is-active'))
-  removeDataLike(cardId)
-  .then(data => {
-    likeCount.textContent = data.likes.length
-  })
+  if (evt.target.classList.contains("card__like-button_is-active")) {
+    addDataLike(cardId).then((data) => {
+      likeCount.textContent = data.likes.length;
+    });
+  } else if (!evt.target.classList.contains("card__like-button_is-active"))
+    removeDataLike(cardId).then((data) => {
+      likeCount.textContent = data.likes.length;
+    });
 }
-// function removeLikeCard () {
-
-// like.classList.toggle('card__like-button_is-active')
-
-// }
 
 // @todo: Функция удаления карточки
 function deleteCard(card) {
   card.remove();
 }
-
-
-
-// Добавить карточку на сервер и вывести на экран при нажатие на кнопку отправить
 
 // Показать все карточки с сервера на экране
 function showCardsPage() {
@@ -118,10 +104,10 @@ function showCardsPage() {
           card._id,
           likeCard,
           zoomImg,
+          card.likes,
           card.likes.length,
           card.owner._id,
-          dataUser._id,
-          card.likes
+          dataUser._id
         )
       );
     });

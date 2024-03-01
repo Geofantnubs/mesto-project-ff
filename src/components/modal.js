@@ -1,4 +1,5 @@
 const popupArray = Array.from(document.querySelectorAll(".popup"));
+
 // Ищем открытый попап
 function seachPopupIsOpen() {
   return popupArray.find((popup) => {
@@ -20,7 +21,6 @@ function openPopup(element) {
 }
 
 // Функция закрытия попап
-
 function closePopup(element) {
   element.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", closeEscPopup);
