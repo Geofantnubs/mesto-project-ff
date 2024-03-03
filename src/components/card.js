@@ -71,17 +71,18 @@ function deleteButtonRemove(cardId, userId, btn) {
 
 // Функция счётчика лайков
 function likeButtonCallback(evt, cardId, likeCount) {
-  likeCard(evt);
 
   const likeMethod = evt.target.classList.contains(
     "card__like-button_is-active"
   )
-    ? addDataLike
-    : removeDataLike;
+    ? removeDataLike
+    : addDataLike;
 
   likeMethod(cardId)
     .then((data) => {
       likeCount.textContent = data.likes.length;
+  likeCard(evt);
+
     })
     .catch((err) => console.log(err));
 }
