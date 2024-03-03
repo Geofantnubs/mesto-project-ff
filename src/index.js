@@ -1,5 +1,11 @@
 import "./pages/index.css";
-import { openPopup, closePopupClick } from "./components/modal.js";
+import {
+  openPopup,
+  closeOverlayPopup,
+  closePopup,
+  seachPopupIsOpen,
+  addPopupAnimation,
+} from "./components/modal.js";
 
 import {
   handleFormSubmitCard,
@@ -7,22 +13,28 @@ import {
   addInfoFromProfil,
   submitForm,
   handleFormSubmitAvatar,
+  handleFormSubmitDelete,
 } from "./components/form.js";
 
+import { enableValidation, clearValidation } from "./components/validation.js";
+
+import { getUser, getCard } from "./components/api.js";
 import {
-  disabledButton,
-  hideInputPopupError,
-  enableValidation,
-  toggleButtonState,
-} from "./components/validation.js";
+  placesList,
+  createCard,
+  likeButtonCallback,
+  cardDelete,
+} from "./components/card.js";
 
-import { getUser } from "./components/api.js";
-import { showCardsPage } from "./components/card.js";
-
-showCardsPage();
 // Переменные главного файла
 const popupImage = document.querySelector(".popup_type_image");
-const cardDelete = {};
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_avtive",
+};
 
 // Переменные модальных окон
 const popupImg = document.querySelector(".popup__image");
@@ -33,65 +45,58 @@ const profilName = document.querySelector(".profile__title");
 const profilDesc = document.querySelector(".profile__description");
 const profilAvatar = document.querySelector(".profile__image");
 
-// Функция показа информации о пользователе с сервера
-function showProfilInfo() {
-  getUser()
-  .then((dataUser) => {
-    profilName.textContent = dataUser.name;
-    profilDesc.textContent = dataUser.about;
-  })
-  .catch((err) => {
-    console.error(`Ошибка: ${err}`);
-  });
+// Функция показа информации о пользователе
+function showProfilInfo(dataUser) {
+  profilName.textContent = dataUser.name;
+  profilDesc.textContent = dataUser.about;
 }
-// Функция показа аватара с сервера
-function showAvatar() {
-  getUser()
-  .then((dataUser) => {
-    profilAvatar.style.backgroundImage = `url(${dataUser.avatar})`;
-  })
-  .catch((err) => {
-    console.error(`Ошибка: ${err}`);
-  });
+// Функция показа аватара
+function showAvatar(dataUser) {
+  profilAvatar.style.backgroundImage = `url(${dataUser.avatar})`;
 }
 
+// Сброс блокировки для кнопки "Сохранить" в профиле
+function disabledButton(formElement, validationConfig) {
+  const buttonElement = formElement.querySelector(
+    validationConfig.submitButtonSelector
+  );
+  buttonElement.removeAttribute("disabled");
+}
 
 // Функция открытия попап аватара
-function openPopupAvatar() {
+function initOpenPopupAvatar() {
   const popupEditAvatar = document.querySelector(".popup_type_edit-avatar");
   const buttonOpenPopupAvatar = document.querySelector(".profile__image");
   const avatarForm = popupEditAvatar.querySelector(".edit-avatar");
 
   buttonOpenPopupAvatar.addEventListener("click", () => {
-    hideInputPopupError(avatarForm);
-    toggleButtonState(avatarForm);
+    clearValidation(avatarForm, validationConfig);
     openPopup(popupEditAvatar);
   });
 }
 
 // Функция открытия попап профиля
-function openPopupProfil() {
+function initOpenPopupProfil() {
   const popupProfil = document.querySelector(".popup_type_edit");
   const buttonOpenPopupProfil = document.querySelector(".profile__edit-button");
   const profilForm = popupProfil.querySelector(".edit-profil");
 
   buttonOpenPopupProfil.addEventListener("click", () => {
     addInfoFromProfil();
-    disabledButton(profilForm);
-    hideInputPopupError(profilForm);
+    clearValidation(profilForm, validationConfig);
+    disabledButton(profilForm, validationConfig);
     openPopup(popupProfil);
   });
 }
 
 // Функция открытия попап добавления карточки
-function openPopupCard() {
+function initOpenPopupCard() {
   const buttonOpenPopupCard = document.querySelector(".profile__add-button");
   const popupNewCard = document.querySelector(".popup_type_new-card");
   const cardForm = popupNewCard.querySelector(".new-place");
 
   buttonOpenPopupCard.addEventListener("click", () => {
-    hideInputPopupError(cardForm);
-    toggleButtonState(cardForm);
+    clearValidation(cardForm, validationConfig);
     openPopup(popupNewCard);
   });
 }
@@ -104,16 +109,65 @@ function zoomImg(link, name) {
   openPopup(popupImage);
 }
 
-showProfilInfo();
-showAvatar();
+// Функция удаления карточки
+function deleteCardCallback(card, cardId) {
+  const popupDelete = document.querySelector(".popup_type_delete-card");
+  cardDelete.cardId = cardId;
+  cardDelete.card = card;
+  openPopup(popupDelete);
+}
+
+// Функция закрытия попап по крестику
+function initClosePopupClick() {
+  const popupCloseButtons = document.querySelectorAll(".popup__close");
+
+  popupCloseButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      closePopup(seachPopupIsOpen());
+    });
+  });
+
+  document.addEventListener("click", closeOverlayPopup);
+}
+
+// Функция вывода на страницу информации
+function showCardAndProfilePage() {
+  Promise.all([getCard(), getUser()])
+    .then(([dataCard, dataUser]) => {
+      showProfilInfo(dataUser);
+      showAvatar(dataUser);
+      dataCard.forEach((card) => {
+        placesList.append(
+          createCard(
+            card,
+            dataUser._id,
+            deleteCardCallback,
+            likeButtonCallback,
+            zoomImg
+          )
+        );
+      });
+    })
+    .catch((err) => {
+      console.error(`Ошибка: ${err}`);
+    });
+}
+
+
+showCardAndProfilePage();
+addPopupAnimation();
+initOpenPopupAvatar();
+initOpenPopupProfil();
+initOpenPopupCard();
+initClosePopupClick();
+enableValidation(validationConfig);
 submitForm("editAvatar", handleFormSubmitAvatar);
 submitForm("editProfile", handleFormSubmitProfil);
 submitForm("newPlace", handleFormSubmitCard);
-closePopupClick();
-enableValidation();
-openPopupAvatar();
-openPopupProfil();
-openPopupCard();
+submitForm("delete-card", () => {
+  handleFormSubmitDelete(cardDelete);
+});
+
 
 export {
   profilName,
@@ -122,6 +176,6 @@ export {
   popupImg,
   popupCaption,
   showProfilInfo,
-  cardDelete,
   showAvatar,
+  deleteCardCallback,
 };

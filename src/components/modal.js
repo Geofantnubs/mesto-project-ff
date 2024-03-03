@@ -40,25 +40,12 @@ function closeOverlayPopup(evt) {
   }
 }
 
-// Обработчик закрытия попапа
-function closePopupClick() {
-  const popupCloseButtons = document.querySelectorAll(".popup__close");
-
-  popupCloseButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      closePopup(seachPopupIsOpen());
-    });
-  });
-
-  document.addEventListener("click", closeOverlayPopup);
-}
-
-addPopupAnimation();
 
 export {
   openPopup,
   closeEscPopup,
-  closePopupClick,
+  closeOverlayPopup,
   seachPopupIsOpen,
   closePopup,
+  addPopupAnimation,
 };
