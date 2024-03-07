@@ -85,12 +85,12 @@ function handleFormSubmitCard(evt) {
   const link = urlInputCard.value;
 
   loadButton(true, cardButton);
-  Promise.all([addCard(name, link), getUser()])
-    .then(([data, userId]) => {
+  addCard(name, link)
+    .then((cardData) => {
       placesList.prepend(
         createCard(
-          data,
-          userId._id,
+          cardData,
+          cardData.owner._id,
           deleteCardCallback,
           likeButtonCallback,
           zoomImg

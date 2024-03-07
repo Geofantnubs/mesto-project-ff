@@ -23,7 +23,6 @@ import {
   placesList,
   createCard,
   likeButtonCallback,
-  cardDelete,
 } from "./components/card.js";
 
 // Переменные главного файла
@@ -35,6 +34,8 @@ const validationConfig = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_avtive",
 };
+const cardDelete = {};
+
 
 // Переменные модальных окон
 const popupImg = document.querySelector(".popup__image");

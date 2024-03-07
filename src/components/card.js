@@ -5,7 +5,6 @@ const cardTemplate = document.querySelector("#card-template").content;
 
 // Переменные карточек
 const placesList = document.querySelector(".places__list");
-const cardDelete = {};
 
 // Функция создания карточки
 function createCard(cardData, userId, deleteCallback, likeCallback, zoomCard) {
@@ -93,5 +92,4 @@ export {
   likeCard,
   placesList,
   likeButtonCallback,
-  cardDelete,
 };
